@@ -76,15 +76,16 @@ public class Main extends InputAdapter implements ApplicationListener {
         if (gameOver) return false;
         // Update next direction based on arrow keys
         //need to make sure that it won't be doing a 180! For example, we can't go North if curDir is SOUTH
-        if (keycode == Keys.UP) {
+        if (keycode == Keys.UP && curDir != Direction.SOUTH) {
             nextDir = Direction.NORTH;
-        } else if (keycode == Keys.DOWN) {
+        } else if (keycode == Keys.DOWN && curDir != Direction.NORTH) {
             nextDir = Direction.SOUTH;
-        } else if (keycode == Keys.LEFT) {
+        } else if (keycode == Keys.LEFT && curDir != Direction.EAST) {
             nextDir = Direction.WEST;
-        } else if (keycode == Keys.RIGHT) {
+        } else if (keycode == Keys.RIGHT && curDir != Direction.WEST) {
             nextDir = Direction.EAST;
         }
+       
         return true;
     }
 
@@ -92,8 +93,16 @@ public class Main extends InputAdapter implements ApplicationListener {
     private void checkApple() {
         //check if the head of the snake is on the apple
         //if it is, increase score, and use your placeApple() method
+        GridPosition head = snake.get(snake.size() - 1);
 
-        snake.remove(0);//only run this code if there is NO APPLE - this deletes the last snake segment. 
+        
+        if (head.x == apple.x && head.y == apple.y) {
+            score++;  
+            placeApple();
+        } else {
+            snake.remove(0);
+        }
+        
     }
     
 
