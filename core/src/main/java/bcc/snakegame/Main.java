@@ -110,31 +110,46 @@ public class Main extends InputAdapter implements ApplicationListener {
     //should return true if the position is located on the snake
     //useful for determining if we have a legal apple position
     private boolean onSnake(GridPosition pos) {
-
+        for (GridPosition gp : snake) {
+            if (gp.x == pos.x && gp.y == pos.y) {
+                return true;
+            }
+        }
         return false;
     }
 
     //checkpoint 2 - need to update apple position creation!
     private void placeApple() {
-        apple = new GridPosition(5,9);
+        do {
+
+        
+            apple = new GridPosition(MathUtils.random(GRID_SIZE - 1), MathUtils.random(GRID_SIZE - 1));
+
         //You will need to use random numbers and a while loop to set the apple position.
         //generate candidate position
         //check that its not on the snake
         //if it is on the snake, try again
         //if not on the snake, set the apple position
-
+        } while (onSnake(apple));
     }
     
     //checkpoint 2
     private void checkDeath() {
-        //check if the head of the snake is an illegal position
+        GridPosition head = snake.get(snake.size() - 1);
+        if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+            gameOver = true;
+            return;
+        }
 
-        // Check out of bounds
-
-        // Check hitting itself
-
-        // set gameOver to true if we die
+        for (int i = 0; i < snake.size() - 1; i++) {
+            GridPosition segment = snake.get(i);
+            if (segment.x == head.x && segment.y == head.y) {
+                gameOver = true;
+                return;
+            }
+        }
     }
+    
 
 
     //helper function for animation, can be safely ignored. DONT EDIT
